@@ -1,21 +1,44 @@
-# LazyAircrack
-It is a automated bash script for wifi hacking.<br/>
-Crack the four way handshake and get into the network.
+<p align="left">
+ <a><img title="Built With Love" src="https://forthebadge.com/images/badges/built-with-love.svg" ></a>
+ </p>
 
-## Installation
+# LazyAircrack 
+The main purpose of the tool is automating wifi attack. It is a automated bash script. Crack the four way handshake and get into the network.<br/>
 
-You can download LazyAircrack by cloning the [Git Repo](https://github.com/Sandesh-Yadav/lazyaircrack). 
+[Watch tutorial on youtube](https://www.youtube.com/channel/UCAdDJn4yWzQMJyKyRWne3qg)
 
+
+## Screenshots
+
+<img src="https://gdurl.com/b31X" width="100%"></img>
+
+## This tool uses 2 methods:
+**1.Wifi Hacking:**
+Get all the wireless traffic around you listed, select the victim and crack the password using handshake packet. 
+The by default dictionary for cracking passowrd is rockyou.txt from linux, don't forget to replace it with your custom dictionary.
+
+**2.Wifi Jammer:**
+It creates denial of service (DoS) condition against any wifi router by continously sending the deauthentication packets resulting in disrupted connection of all connected users to it.
+
+<b>Note:</b> at the end of the script all the log files are deleted, if you abort the script in middle for whatsoever reason - delete all the log files manually if created.
+To get a handshake, there should be at least one active user using the wifi.
+
+## Installing and requirements
+- aircrack-ng
+- Linux or Unix-based system (Currently tested only on Kali Linux rolling).
+
+### Installing
++ **For Linux :**
 ```
-~ ❯❯❯ git clone https://github.com/Sandesh-Yadav/lazyaircrack.git
+~ ❯❯❯ git clone https://github.com/3xploitGuy/lazyaircrack.git
 
 ~ ❯❯❯ cd lazyaircrack
 
-~/lazyaircrack ❯❯❯ chmod +x wifi.sh
+~/lazyaircrack ❯❯❯ chmod +x lazyaircrack.sh
 
 ~/lazyaircrack ❯❯❯ chmod +x airplay.sh
 
-~/lazyaircrack ❯❯❯ ./wifi.sh
+~/lazyaircrack ❯❯❯ ./lazyaircrack.sh
 ```
 
 ## Basics
@@ -24,17 +47,13 @@ You can download LazyAircrack by cloning the [Git Repo](https://github.com/Sande
 
 > Channel: As Wi-Fi data is digital, the signals are transmited and received on a certain frequency also known as channel.
 
-## Usage
 
-The by default dictionary for cracking passowrd is rockyou.txt from linux, don't forget to replace it with your custom dictionary.
+## Contact
+[Gmail](mailto:sandeshyadavm46@gmail.com)
 
-Note: at the end of the script all the log files are deleted, if you abort the script in middle for whatsoever reason - delete all the log files manually.
+## Disclaimer
 
-To get a handshake, there should be at least one active user using the wifi.
-
-## Demo
-
-A youtube tutorial of script will be launching soon.
+LazyAircrack is created to help in penetration testing and it's not responsible for any misuse or illegal purposes.
 
 Feel free to raise any issue on github if you stuck somewhere with the script.
 
