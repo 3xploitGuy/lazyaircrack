@@ -34,8 +34,10 @@ hacking () {
 airmon-ng start wlan0 > /dev/null
 trap "airmon-ng stop wlan0mon > /dev/null" EXIT
 airodump-ng wlan0mon
-read -p "Enter the network BSSID > " bssid
-read -p "Enter the corresponding Channel > " ch
+echo
+read -p "$(tput setaf 1)Enter the target network BSSID > $(tput setaf 7)" bssid
+echo
+read -p "$(tput setaf 2)Enter the corresponding Channel > $(tput setaf 7)" ch
 }
 if [ $(dpkg-query -W -f='${Status}' aircrack-ng 2>/dev/null | grep -c "ok installed") -eq 0 ];
 then
