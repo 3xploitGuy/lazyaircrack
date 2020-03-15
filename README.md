@@ -5,7 +5,7 @@
 # LazyAircrack 
 The main purpose of the tool is automating wifi attack. It is a automated bash script. Crack the four way handshake and get into the network.<br/>
 
-[Watch tutorial on youtube](https://www.youtube.com/channel/UCAdDJn4yWzQMJyKyRWne3qg)
+[Watch tutorial on youtube](https://www.youtube.com/watch?v=tdhVCyhH5Y8)
 
 
 ## Screenshots
@@ -25,7 +25,8 @@ To get a handshake, there should be at least one active user using the wifi.
 
 ## Installing and requirements
 - aircrack-ng
-- Linux or Unix-based system (Currently tested only on Kali Linux rolling).
+- Linux or Unix-based system (Currently tested only on Kali Linux rolling)
+- Root access
 
 ### Installing
 + **For Linux :**
