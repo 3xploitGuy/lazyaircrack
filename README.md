@@ -10,7 +10,7 @@ The main purpose of the tool is automating wifi attack. It is a automated bash s
 
 ## Screenshots
 
-<img src="https://drive.google.com/file/d/1Z1aq4-SpUsU8ztSM-KzDHotXrOU7QRRP/view?usp=sharing" width="100%"></img>
+<img src="https://gdurl.com/b31X" width="100%"></img>
 
 ## This tool uses 2 methods:
 **1.Wifi Hacking:**
