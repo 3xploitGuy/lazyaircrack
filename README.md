@@ -2,26 +2,30 @@
  <a><img title="Built With Love" src="https://forthebadge.com/images/badges/built-with-love.svg" ></a>
  </p>
 
-# LazyAircrack 
-The main purpose of the tool is automating wifi attack. It is a automated bash script. Crack the four way handshake and get into the network.<br/>
-
-[Watch tutorial on youtube](https://www.youtube.com/watch?v=tdhVCyhH5Y8)
+# LazyAircrack ![License](https://img.shields.io/badge/License-MIT-yellow.svg) ![Version](https://img.shields.io/badge/Version-2.0-red.svg)
+The main purpose of the tool is automating wifi attack. It is a automated bash script for aircrack-ng. Crack the four way handshake and get into the network.<br/>
 
 
 ## Screenshots
 
-<img src="https://user-images.githubusercontent.com/46316908/88089022-f8f56f00-cba8-11ea-82e1-a940a8089db1.png" width="100%"></img>
+<img src="https://user-images.githubusercontent.com/46316908/103147425-ea743a80-477a-11eb-999c-f590f5165ffc.png" width="100%"></img>
 
 ## This tool uses 2 methods:
 **1.Wifi Hacking:**
 Get all the wireless traffic around you listed, select the victim and crack the password using handshake packet. 
-The by default dictionary for cracking passowrd is rockyou.txt from linux, don't forget to replace it with your custom dictionary.
+The by default wordlist for cracking passowrd is rockyou.txt from linux, don't forget to replace it with your custom dictionary as per the target or you can still choose to use the default one. 
+<br>
+<img src="https://user-images.githubusercontent.com/46316908/103164836-3cc66180-4836-11eb-9d50-2e312c93acec.png" width="100%"></img>
 
 **2.Wifi Jammer:**
 It creates denial of service (DoS) condition against any wifi router by continously sending the deauthentication packets resulting in disrupted connection of all connected users to it.
+<br>
+<img src="https://user-images.githubusercontent.com/46316908/103164841-5798d600-4836-11eb-918f-f67847d2837f.png" width="100%"></img>
 
-<b>Note:</b> at the end of the script all the log files are deleted, if you abort the script in middle for whatsoever reason - delete all the log files manually if created.
-To get a handshake, there should be at least one active user using the wifi.
+<b>Note:</b>
++ To get a handshake, there should be at least one active user using the wifi. By default the script waits 2 mins for handshake packet and checks every 20 seconds if found or not. You can change the waiting time by modifying value of variable "handshakeWait" present at line number 10 in script.
++ If the password is not found in default wordlist try using custom wordlist, you can use tools like crunch and cupp for generating wordlist.
++ Don't waste your time trying to attack wifi networks without password, since there is no password protection the script will not be able to determine encryption type and will exit with message "Can't find Handshake".
 
 ## Installing and requirements
 - aircrack-ng
@@ -37,8 +41,6 @@ To get a handshake, there should be at least one active user using the wifi.
 
 ~/lazyaircrack ❯❯❯ chmod +x lazyaircrack.sh
 
-~/lazyaircrack ❯❯❯ chmod +x airplay.sh
-
 ~/lazyaircrack ❯❯❯ ./lazyaircrack.sh
 ```
 
@@ -51,13 +53,14 @@ To get a handshake, there should be at least one active user using the wifi.
 
 ## Contact
 [Gmail](mailto:3xploitguy@gmail.com)
-[Website](https://sandeshyadav.000webhostapp.com)
 
 ## Disclaimer
 
 LazyAircrack is created to help in penetration testing and it's not responsible for any misuse or illegal purposes.
 
-Feel free to raise any issue on github if you stuck somewhere with the script.
+Feel free to discuss any issue or new feature at GitHub's new [Discussions](https://github.com/3xploitGuy/lazyaircrack/discussions).
+
+Pull requests are always welcomed.
 
 ## License
 
